@@ -7,4 +7,4 @@
 
        標頭檔修改參考 : https://github.com/arduino-libraries/NTPClient/issues/36
 
-3/7 => RTC網路校時
+3/7 => RTC網路校時 LCD測試
