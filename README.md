@@ -8,7 +8,7 @@
        標頭檔修改參考 : https://github.com/arduino-libraries/NTPClient/issues/36
 
 3/7 => RTC網路校時 LCD測試 linkit 開發板安裝
-       
+
        ntp_lcd.ino   -> LCD顯示 NTP時間
        
        3IN1.ino      -> LCD顯示 NTP時間 + RTC
