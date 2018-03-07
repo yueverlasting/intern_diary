@@ -3,12 +3,15 @@
 #include <NTPClient.h>
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
-#include "Wire.h"
 
 DS3231 Clock;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, 28800);
 
+const char *ssid     = "Yueverlasting";
+const char *password = "10241228";
+String cday[7]={"sun","mon","tue","wen","tur","fri","sat"};
+String str_Ntime, str_Rtime;
 
 byte Year;
 byte Month;
@@ -21,11 +24,6 @@ byte Second;
 bool Century = false;
 bool h12;
 bool PM;
-
-const char *ssid = "TVTC-MOA";
-const char *password = "22592566";
-
-
 
 bool GetDateStuff(byte& Year, byte& Month, byte& Day, byte& DoW,
                   byte& Hour, byte& Minute, byte& Second) {
@@ -74,7 +72,7 @@ bool GetDateStuff(byte& Year, byte& Month, byte& Day, byte& DoW,
 void GetDateStuffFromNtpClient(byte& Year, byte& Month, byte& Day, byte& DoW,
                                byte& Hour, byte& Minute, byte& Second) {
   Year = Clock.getYear();
-  Month = Clock.getMonth(Century);
+  Month = Clock.getMonth();
   Day = Clock.getDate();
   DoW = (byte)timeClient.getDay();
   Hour = (byte)timeClient.getHours();
@@ -82,7 +80,45 @@ void GetDateStuffFromNtpClient(byte& Year, byte& Month, byte& Day, byte& DoW,
   Second = (byte)timeClient.getSeconds();
 }
 
-void displayCurrentTime() {
+void setup(){
+    /*WIFI部分*/
+  Serial.begin(115200);
+  Serial.setTimeout(5000);
+  Wire.begin();
+  WiFi.begin(ssid, password);  //wifi開始連接
+
+  while ( WiFi.status() != WL_CONNECTED ) {
+    delay ( 500 );
+    Serial.print ( "." );
+  }
+  timeClient.begin();
+
+}
+
+void loop() {
+  timeClient.update();
+  
+  Serial.println("NET time : ");
+  print_netDate();
+
+  Serial.println("RTC time : ");
+  printDate();
+  Serial.println("");
+  
+  setCurrentTime(Year, Month, Date, DoW, Hour, Minute, Second);
+    if (Serial.available()) {
+    bool success = GetDateStuff(Year, Month, Date, DoW, Hour, Minute, Second);
+    if (success) {
+      Clock.setClockMode(false);  // set to 24h
+      //setClockMode(true); // set to 12h
+
+      setCurrentTime(Year, Month, Date, DoW, Hour, Minute, Second);
+    }
+  }
+  delay(1000);
+}
+
+void printDate(){
   Serial.print(Clock.getYear(), DEC);
   Serial.print("-");
   Serial.print(Clock.getMonth(Century), DEC);
@@ -95,6 +131,23 @@ void displayCurrentTime() {
   Serial.print(":");
   Serial.println(Clock.getSecond(), DEC);
 }
+void print_netDate(){
+  str_Ntime = ((timeClient.getHours())+8) +(timeClient.getMinutes()) + (timeClient.getSeconds()) ;
+  //print the date EG   3-1-11 23:59:59
+  Serial.print( timeClient.getYear() );
+  Serial.print("/");
+  Serial.print(timeClient.getMonth());
+  Serial.print("/");
+  Serial.print(timeClient.getDate());
+  Serial.print("  ");
+  Serial.print( (timeClient.getHours()) );
+  Serial.print(":");
+  Serial.print(timeClient.getMinutes());
+  Serial.print(":");
+  Serial.print(timeClient.getSeconds());
+  Serial.print("  ");
+  Serial.println( cday[timeClient.getDay()] );
+}
 
 void setCurrentTime(byte& Year, byte& Month, byte& Day, byte& DoW,
                     byte& Hour, byte& Minute, byte& Second) {
@@ -105,43 +158,4 @@ void setCurrentTime(byte& Year, byte& Month, byte& Day, byte& DoW,
   Clock.setHour(Hour);
   Clock.setMinute(Minute);
   Clock.setSecond(Second);
-}
-
-
-void setup() {
-  // Start the serial port
-  Serial.begin(57600);
-  Serial.setTimeout(5000);
-
-  // Start the I2C interface
-  Wire.begin();
-
-  WiFi.begin(ssid, password);
-
-  while ( WiFi.status() != WL_CONNECTED ) {
-    delay ( 500 );
-    Serial.print ( "." );
-  }
-
-  timeClient.begin();
-}
-
-void loop() {
-  timeClient.update();
-  Serial.println("NTP Clock Time: " + timeClient.getFormattedTime());
-  GetDateStuffFromNtpClient(Year, Month, Date, DoW, Hour, Minute, Second);
-  setCurrentTime(Year, Month, Date, DoW, Hour, Minute, Second);
-  // If something is coming in on the serial line, it's
-  // a time correction so set the clock accordingly.
-  if (Serial.available()) {
-    bool success = GetDateStuff(Year, Month, Date, DoW, Hour, Minute, Second);
-    if (success) {
-      Clock.setClockMode(false);  // set to 24h
-      //setClockMode(true); // set to 12h
-
-      setCurrentTime(Year, Month, Date, DoW, Hour, Minute, Second);
-    }
-  }
-  displayCurrentTime();
-  delay(1000);
 }
