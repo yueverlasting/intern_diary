@@ -13,6 +13,7 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);
 const char *ssid     = "Yueverlasting";
 const char *password = "10241228";
 String cday[7]={"sun","mon","tue","wen","tur","fri","sat"};
+int last_time ;
 
 byte Year;
 byte Month;
@@ -22,9 +23,9 @@ byte Hour;
 byte Minute;
 byte Second;
 
-bool Century = false;
 bool h12;
 bool PM;
+bool Century = false;
 
 bool GetDateStuff(byte& Year, byte& Month, byte& Day, byte& DoW,
                   byte& Hour, byte& Minute, byte& Second) {
@@ -139,6 +140,7 @@ void lcd_play() {
   lcd.print(timeClient.getSeconds());
 }
 void printDate(){
+
   Serial.print(Clock.getYear(), DEC);
   Serial.print("-");
   Serial.print(Clock.getMonth(Century), DEC);
@@ -152,6 +154,7 @@ void printDate(){
   Serial.println(Clock.getSecond(), DEC);
 }
 void print_netDate(){
+  last_time = timeClient.getSeconds();
   //print the date EG   3-1-11 23:59:59
   Serial.print( timeClient.getYear() );
   Serial.print("/");
@@ -169,30 +172,26 @@ void print_netDate(){
 }
 void loop() {
   timeClient.update();
-  lcd_play();
-  Serial.println("NET time : ");
-  print_netDate();
+  while (last_time != timeClient.getSeconds() ){
+      lcd_play();
+      Serial.println("NET time : ");
+      print_netDate();
   
-  GetDateStuffFromNtpClient(Year, Month, Date, DoW, Hour, Minute, Second);
-  setCurrentTime(Year, Month, Date, DoW, Hour, Minute, Second); 
+      GetDateStuffFromNtpClient(Year, Month, Date, DoW, Hour, Minute, Second);
+      setCurrentTime(Year, Month, Date, DoW, Hour, Minute, Second); 
   
-  Serial.println("RTC time : ");
-  printDate();
-  Serial.println("");
-  
+      Serial.println("RTC time : ");
+      printDate();
+      Serial.println("");
+ 
+      if (Serial.available()) {
+        bool success = GetDateStuff(Year, Month, Date, DoW, Hour, Minute, Second);
+        if (success) {
+          Clock.setClockMode(false);  // set to 24h
+          //setClockMode(true); // set to 12h
 
-    if (Serial.available()) {
-    bool success = GetDateStuff(Year, Month, Date, DoW, Hour, Minute, Second);
-    if (success) {
-      Clock.setClockMode(false);  // set to 24h
-      //setClockMode(true); // set to 12h
-
-      setCurrentTime(Year, Month, Date, DoW, Hour, Minute, Second);
-    }
+         setCurrentTime(Year, Month, Date, DoW, Hour, Minute, Second);
+         }
+      }   
   }
-  
-  delay(1000);
 }
-
-
-
