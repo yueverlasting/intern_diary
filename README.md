@@ -13,3 +13,5 @@
        
        3IN1.ino      -> LCD顯示 NTP時間 + RTC
                         腳位 SDA -> D2 , SCL ->D1
+
+3/8 => linkit 7697 studying
