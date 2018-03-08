@@ -15,3 +15,4 @@
                         腳位 SDA -> D2 , SCL ->D1
 
 3/8 => linkit 7697 studying
+       PN532 整個GG 
