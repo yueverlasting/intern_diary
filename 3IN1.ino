@@ -103,7 +103,7 @@ void setup(){
 
   //BWire.begin(D4,D3);
 
-  lcd.begin();       // Should match the number provided to the constructor.
+  lcd.begin(20,4);       // Should match the number provided to the constructor.
   lcd.backlight();     // Turn on the backlight.
   //lcd.print("hello,maker"); 
   
