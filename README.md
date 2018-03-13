@@ -16,3 +16,5 @@
 
 3/8 => linkit 7697 studying
        PN532 整個GG 
+
+3/13 => PN532 成功
