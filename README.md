@@ -17,7 +17,9 @@
 3/8 => linkit 7697 studying
        PN532 整個GG 
 
-3/13 => PN532 成功
+3/13 => PN532 成功 & sd card測試
 
         嘗試 PN532 + LCD =>失敗
-        
+        sd card測試第一階段 確認連結上nodemcu
+        明天帶sd卡測試
+        
