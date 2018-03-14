@@ -23,3 +23,4 @@
         sd card測試第一階段 確認連結上nodemcu
         明天帶sd卡測試
         
+3/14 => SD卡測試 & 將RFID的資訊存入SD CARD
