@@ -24,8 +24,8 @@
         檔案: NFC_READ.INO
         功能: 讀取NFC卡片
         腳位: 
-              |  NFC	   | NodeMCU	   |
-              | ------  | ------     |
+              | NFC	| NodeMCU	|
+              | ------  | ------ |
               |  SS (CS)| D2	(GPIO4) |
               | ------  | ------     | 
               |  IRQ    |	D3	(GPIO0) |
