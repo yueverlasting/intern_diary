@@ -36,7 +36,7 @@
 
        檔案 : SD_TEST.INO
        功能 : 在SD卡的TEST.TXT 寫入現在時間
-       腳位 :  CS    ->D8
+       腳位 :  CS    ->D8
                MOSI -> D7
                SCK  -> D5
                MISO -> D6
