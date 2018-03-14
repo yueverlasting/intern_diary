@@ -32,7 +32,7 @@
               MOSI    -> D7	(GPIO13)
               
 
-3/14 => SD卡測試 & 將RFID的資訊存入SD CARD
+3/14 => SD卡測試 & 將RFID的資訊存入SD CARD & 測試linkit7697
 
        檔案 : SD_TEST.INO
        功能 : 在SD卡的TEST.TXT 寫入現在時間
