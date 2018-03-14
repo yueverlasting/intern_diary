@@ -24,6 +24,7 @@
         嘗試 PN532 + LCD =>失敗
         sd card測試第一階段 確認連結上nodemcu
         明天帶sd卡測試
+       
         檔案: NFC_READ.INO
         功能: 讀取NFC卡片
         腳位:  NFC	 NodeMCU
