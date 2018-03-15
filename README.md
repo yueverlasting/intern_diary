@@ -41,3 +41,8 @@
                SCK  -> D5
                MISO -> D6
        
+3/15 => NodeMCU 監聽模式
+
+       檔案 : spiffy6.ino
+       功能 : 接收所有mac address
+       
