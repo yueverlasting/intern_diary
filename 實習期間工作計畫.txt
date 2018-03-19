@@ -1,22 +1,48 @@
-1. MCU 
+### 1. MCU 
     (1) blink
     (2) pin out study
     
-2.  timer
+### 2.  timer
     (1) 斷電，時間不間斷
     (2) serial校時
     (3) 網路NTP校時
     (4) 評估TIMER功效
     
-3. 20*04 LCD    
+### 3. 20*04 LCD    
     (1) DISPLAY
   
-4.  NFC PN532 / PN522
+### 4.  NFC PN532 / PN522
     (1) 選擇函式庫
     (2) 讀取卡片資料
     (3) SAMPLE CODE STUDY
    
-5.  SD card
+### 5.  SD card
     (1) 寫入資料
     (2) 有無SD card
     (3) 重設SD card
+
+### 6.  讀取WIFI
+    (1) WIFI AP/CLIENT模式
+    (2) 偵測模式
+    (3) SAMPLE CODE
+    (4) 寫入SD CARD
+    (5) 判斷訊息重複
+    
+### 7.寫回MQTT
+    (1)MQTT連線
+    (2)保持連線
+    (3)PUBLISH資料
+    (4)PUBLISH  WIFI 資料
+
+### 8.同時處理SERIAL MQTT NFC
+    (1)多工安排
+    (2)同時處理不同作業
+    (3)IO管理
+    
+### 9.應用整合
+    (1)穩定性
+    (2)電源
+    (3)MCU內存觀測
+    (4)外界環境觀測
+    (5)不同MCU比較
+    
