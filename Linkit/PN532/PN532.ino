@@ -29,7 +29,7 @@ Adafruit_PN532 nfc(PN532_SCK, PN532_MISO, PN532_MOSI, PN532_SS);
 //Adafruit_PN532 nfc(PN532_IRQ, PN532_RESET);
 
 void setup(void) {
-  Serial.begin(115200);
+  Serial.begin(57600);
   Serial.println("Hello!");
 
   nfc.begin();
