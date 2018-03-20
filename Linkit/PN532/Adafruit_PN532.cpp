@@ -228,22 +228,82 @@ void Adafruit_PN532::begin() {
     @param  numBytes  Data length in bytes
 */
 /**************************************************************************/
-void Adafruit_PN532::PrintHex(const byte * data, const uint32_t numBytes)
+String dec_to_hex(int a){
+	
+	int a2,a1;
+	String hex_str;
+	
+	a2 = a/16 ;
+	a1 = a%16 ;
+
+	if(a >=16 ) {     //第二位 
+		if(a2 >10)
+			{
+				switch (a2){ 
+				case 10 :	hex_str += 'A'; break;
+				case 11 :	hex_str += 'B'; break;
+				case 12 :	hex_str += 'C'; break;
+				case 13 :	hex_str += 'D'; break;
+				case 14 :	hex_str += 'E'; break;
+				case 15 :	hex_str += 'F'; break;
+				} 
+			}
+		else { hex_str += a2 ; }		
+	}
+	else { hex_str = hex_str; }
+	
+	
+	if(a1 != 0) {     //第二位 
+		if(a1 >10)
+			{
+				switch (a1){ 
+				case 10 :	hex_str += 'A'; break;
+				case 11 :	hex_str += 'B'; break;
+				case 12 :	hex_str += 'C'; break;
+				case 13 :	hex_str += 'D'; break;
+				case 14 :	hex_str += 'E'; break;
+				case 15 :	hex_str += 'F'; break;
+				} 
+			}
+		else { hex_str += a1 ; }		
+	}
+	else { hex_str += "0" ; }	
+	
+	return hex_str;
+}
+String Adafruit_PN532::PrintHex(const byte * data, const uint32_t numBytes)
 {
   uint32_t szPos;
+  String uid_code = "" ;
+  int dec_hex_3,dec_hex_2,dec_hex_1,dec_hex ;
+  String hex_str = "" ;
+  
   for (szPos=0; szPos < numBytes; szPos++) 
   {
     Serial.print(F("0x"));
+    uid_code += "0x";
     // Append leading 0 for small values
     if (data[szPos] <= 0xF)
-      Serial.print(F("0"));
+    {
+    	Serial.print(F("0"));
+      	uid_code += "0";
+	}
+
     Serial.print(data[szPos]&0xff, HEX);
+	dec_hex = (data[szPos]&0xff) ;
+
+	hex_str = dec_to_hex(dec_hex);
+	uid_code += hex_str ;
+
+    
     if ((numBytes > 1) && (szPos != numBytes - 1))
     {
       Serial.print(F(" "));
+      uid_code += " " ;
     }
   }
   Serial.println();
+  return uid_code ;
 }
 
 /**************************************************************************/
@@ -731,8 +791,8 @@ bool Adafruit_PN532::inListPassiveTarget() {
   if (!waitready(30000)) {
     return false;
   }
-
   readdata(pn532_packetbuffer,sizeof(pn532_packetbuffer));
+
   
   if (pn532_packetbuffer[0] == 0 && pn532_packetbuffer[1] == 0 && pn532_packetbuffer[2] == 0xff) {
     uint8_t length = pn532_packetbuffer[3];
