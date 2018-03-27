@@ -60,7 +60,7 @@ void file_write (){
 
 
 void loop() {
-  // channel = 1;
+  channel = 1;
   wifi_set_channel(channel);
   while (true) {
     nothing_new++;                          // Array is not finite, check bounds and adjust if required
