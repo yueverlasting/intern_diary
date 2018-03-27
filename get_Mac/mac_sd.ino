@@ -4,7 +4,7 @@
 #include <SPI.h>
 #include <SD.h>
 #include <ESP8266WiFi.h>
-#include "./functions.h"
+#include <functions.h>
 
 #define disable 0
 #define enable  1
@@ -12,6 +12,7 @@
 unsigned int channel = 1;
 String Mac_address ;
 File myFile; 
+bool check;
 
 void setup() {
   Serial.begin(57600);
@@ -19,7 +20,8 @@ void setup() {
   Serial.println("Initializing SD card...");
   if (!SD.begin(4)) {Serial.println("initialization failed!");}
   else {  Serial.println("initialization done."); }
-  
+
+  check = SD.begin(4);
   Serial.printf("\n\nSDK version:%s\n\r", system_get_sdk_version());
   Serial.println(F("ESP8266 mini-sniff by Ray Burnette http://www.hackster.io/rayburne/projects"));
   Serial.println(F("Type:   /-------MAC------/-----WiFi Access Point SSID-----/  /----MAC---/  Chnl  RSSI"));
@@ -31,6 +33,16 @@ void setup() {
   wifi_promiscuous_enable(enable);
 
 }
+
+bool  check_card (){
+   if (SD.begin(4) != check) {
+  Serial.println("Re_initialization !");
+  return true;
+  }
+  check = SD.begin(4);
+  return false;
+}
+
 void file_write (){
       myFile = SD.open("test.txt", FILE_WRITE);
       // if the file opened okay, write to it:
@@ -46,8 +58,9 @@ void file_write (){
     }
 }
 
+
 void loop() {
-  channel = 1;
+  // channel = 1;
   wifi_set_channel(channel);
   while (true) {
     nothing_new++;                          // Array is not finite, check bounds and adjust if required
@@ -59,17 +72,18 @@ void loop() {
     }
     delay(1);  // critical processing timeslice for NONOS SDK! No delay(0) yield()
     // Press keyboard ENTER in console with NL active to repaint the screen
-    if ((Serial.available() > 0) && (Serial.read() == '\n')) {
+    
+     if ((Serial.available() > 0) && (Serial.read() == '\n')) {
       Serial.println("\n-------------------------------------------------------------------------------------\n");
       for (int u = 0; u < clients_known_count; u++) {
         print_client(clients_known[u]);
         Mac_address = print_client(clients_known[u]);
+
+        check_card();
         file_write();
-        //myFile.println(Mac_address);
       }
-      file_write();
       for (int u = 0; u < aps_known_count; u++) print_beacon(aps_known[u]);
       Serial.println("\n-------------------------------------------------------------------------------------\n");
-    }
+     }
   }
 }
